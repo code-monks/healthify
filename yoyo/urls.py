@@ -4,5 +4,5 @@ from .views import *
 
 
 urlpatterns = [
-    path('all/', AnimalTask.as_view(), name="songs-all")
+    path('all/', HeartRateView.as_view(), name="songs-all")
 ]

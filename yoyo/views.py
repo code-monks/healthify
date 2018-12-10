@@ -7,6 +7,9 @@ from .models import Animal
 from .serializers import AnimalSerializer
 import requests
 
+# Video Processing imports
+from yoyo.vpg import main
+
 
 # Indent Cmd + Alt + L
 
@@ -20,7 +23,13 @@ def download(url, path = '/home/nikhil/Github/healthify/yoyo/media/new2.mov', ch
         return path
     raise Exception('Given url is return status code:{}'.format(req.status_code))
 
+class HeartRateView(APIView):
+    def get(self, request, format=None):
+        path = download('https://res.cloudinary.com/drbmjxpbv/video/upload/v1544449847/rcngdj1e5vi0kitrnd6o.mp4')
+        ans = main(path)
+        return Response(ans)
 class AnimalTask(APIView):
+    
     def get(self, request, format=None):
         animals = Animal.objects.all()
         serializer = AnimalSerializer(animals, many=True)

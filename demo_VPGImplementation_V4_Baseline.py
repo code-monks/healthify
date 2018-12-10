@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import time
 #import matplotlib.pyplot as plt
-from drawnow import *
+# from drawnow import *
 from scipy.signal import butter, lfilter
 from scipy.signal import  savgol_filter,filtfilt,welch,butter
 
