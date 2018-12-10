@@ -17,7 +17,7 @@ from scipy import interpolate
 
 fs = 30.0
 fps = 30
-pathToVideo='paste path here'
+# pathToVideo='paste path here'
 
 
 def butter_bandpass(lowcut, highcut, fs, order=5):
@@ -76,7 +76,7 @@ intialFlag=3 #For sliding window
 min_YCrCb = np.array([0,133,98],np.uint8)
 max_YCrCb = np.array([255,177,142],np.uint8)
 
-capture = cv2.VideoCapture(pathToVideo) #From webcamera
+capture = cv2.VideoCapture(0) #From webcamera
 if not capture.isOpened():
     raise RuntimeError('Error opening VideoCapture.')
 ##capture.set(3,640)
