@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import time
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from drawnow import *
 from scipy.signal import butter, lfilter
 from scipy.signal import  savgol_filter,filtfilt,welch,butter
@@ -17,6 +17,8 @@ from scipy import interpolate
 
 fs = 30.0
 fps = 30
+pathToVideo='paste path here'
+
 
 def butter_bandpass(lowcut, highcut, fs, order=5):
     nyq = 0.5 * fs
@@ -74,7 +76,7 @@ intialFlag=3 #For sliding window
 min_YCrCb = np.array([0,133,98],np.uint8)
 max_YCrCb = np.array([255,177,142],np.uint8)
 
-capture = cv2.VideoCapture(0) #From webcamera
+capture = cv2.VideoCapture(pathToVideo) #From webcamera
 if not capture.isOpened():
     raise RuntimeError('Error opening VideoCapture.')
 ##capture.set(3,640)
@@ -84,8 +86,7 @@ if not capture.isOpened():
 #snapshot = np.zeros(frame.shape, dtype=np.uint8)
 stime=np.array([])
 scolor=np.array([])
-
-   
+face_cas = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml') 
 i=0
 colors = {'red': [], 'green': [], 'blue': []}
 while True:
@@ -94,20 +95,20 @@ while True:
 
     #Read a frame
     (grabbed, frame) = capture.read()
-    cv2.imshow('Video', frame)
-    cv2.imwrite('TestResol.jpg',frame)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = face_cas.detectMultiScale(gray, 1.3, 5)
+    #cv2.imshow('Video', frame)
+    #cv2.imwrite('TestResol.jpg',frame)
     #NEED FACE-MASK IMPLEMENTATION HERE
-    
     frame_num +=1
-
     #Skinmask implementation
     transcol=cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
     mask = cv2.inRange(transcol,min_YCrCb,max_YCrCb)
-    cv2.imshow('mask',mask)
+    #cv2.imshow('mask',mask)
     res = cv2.bitwise_and(transcol,transcol, mask= mask)
     #cv2.imshow('res',res)
     transcol2=cv2.cvtColor(res, cv2.COLOR_YCR_CB2BGR)
-    cv2.imshow('rest',transcol2)
+    #cv2.imshow('rest',transcol2)
     face=transcol2
 
     #Chosing the Region of Interest
@@ -197,13 +198,13 @@ while True:
         filtered_trace=butter_bandpass_filter(trace,0.33,2.0,frame_rate,order=5)
 
        
-        plot1=plt.subplot(311)
-        plot1.set_title('Raw VPG Signal')
-        plt.plot(trace)
+        #plot1=plt.subplot(311)
+        #plot1.set_title('Raw VPG Signal')
+        #plt.plot(trace)
 
-        plot2=plt.subplot(312)
-        plot2.set_title('Filtered Signal')
-        plt.plot(filtered_trace)
+        #plot2=plt.subplot(312)
+        #plot2.set_title('Filtered Signal')
+        #plt.plot(filtered_trace)
 
         f,psd=signal.welch(filtered_trace,frame_rate,noverlap=128,nperseg=256,nfft=1024)
              
@@ -212,21 +213,22 @@ while True:
         HRs.append(heartRate)
         HRs=HRs[-5:]
         heartRate_mdn=np.median(HRs)
+        heartRate_mean=np.mean(HRs)
         
-        print("Inst. Heart Rate:{:6.2f}; Median Heart Rate:{:6.2f}".format(heartRate,heartRate_mdn))
+        print("Inst. Heart Rate:{:6.2f}; Median Heart Rate:{:6.2f}; Mean Heart Rate:{:6.2f}".format(heartRate,heartRate_mdn,heartRate_mean))
         
-        plot3=plt.subplot(313)
-        plot3.set_title('Power Spectral Density')
-        plt.plot(f,psd,label="HRi: {:.2f}; HRm: {:.2f} ".format(heartRate,heartRate_mdn))
+        #plot3=plt.subplot(313)
+        #plot3.set_title('Power Spectral Density')
+        #plt.plot(f,psd,label="HRi: {:.2f}; HRm: {:.2f} ".format(heartRate,heartRate_mdn))
         
-        plot3.legend()
+        #plot3.legend()
 
 
-        plt.pause(0.005)
+        #plt.pause(0.005)
 
-        plot1.cla()
-        plot2.cla()
-        plot3.cla()
+        #plot1.cla()
+        #plot2.cla()
+        #plot3.cla()
 
         #clean up for new interval
         
