@@ -23,6 +23,8 @@ communities
 * Django
 * Cloudinary- cloud storage
 
-# Demo
+# Important Links
 * [Algorithm Demo](https://drive.google.com/open?id=1Qovlw_KOla22-grHM08HWZKm_DKM1ppt)
 * [Application Demo](https://docs.google.com/file/d/1WwdjOK6sJmViB5PRAT8Ca1WruwLxIpK1/preview)
+* [Idea Draft](https://github.com/code-monks/healthify/blob/master/Idea%20Draft.pdf)
+* [Final Project Presentation](https://github.com/code-monks/healthify/blob/master/Project%20Presentation.pdf)
